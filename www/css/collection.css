@@ -1,0 +1,25 @@
+/*collection css*/
+
+.box{
+ width: 25%;
+ height: 60px;
+ overflow: hidden;
+ -webkit-box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5); 
+ box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+#collectionHeader{
+ color:#eee;
+ font-size:15pt;
+ background-color:rgba(0,0,255,0.5);
+ padding:3px;
+ text-align:center;
+ border-radius: 10px;
+ -webkit-box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5); 
+ box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+ons-row ->img {
+ -webkit-box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5); 
+ box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+ 

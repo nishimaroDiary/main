@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+
+<html lang="ja">
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="components/loader.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/map.css">
+    <link rel="stylesheet" href="css/collection.css">
+    <link type="text/css" rel="stylesheet" href="common/lightbox2-master/src/css/lightbox.css">
+    <style>
+        .mainContent {
+            background-image: url(img/back.jpg);
+            background-position:center top;
+            background-repeat:no-repeat;
+            background-size:cover;
+        }
+    </style>
+    <script type="text/javascript" src="components/loader.js"></script>
+    <script type="text/javascript" src="js/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" src="js/hammer.min.js"></script>
+    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyCQsHQ0CArVCWEDhGNEwcaICD_6prvk_sg&libraries=geometry"></script>
+    <script type="text/javascript" src="js/gmaps.js"></script>
+    <script type="text/javascript" src="js/signup.js"></script>
+    <script type="text/javascript" src="js/top.js"></script>
+    <script type="text/javascript" src="js/collection.js"></script>
+    <script type="text/javascript" src="js/diary.js"></script>
+    <script type="text/javascript" src="js/map.js"></script>
+    <script type="text/javascript" src="js/ranking.js"></script>
+    <script>
+        var otherMenuIdx;
+        ons.bootstrap();
+        $.ajaxSetup({
+            timeout: 10000
+        });
+        ons.ready(function() {
+            appTab.on("prechange", function(event){
+                if(event.index == 4)
+                    event.cancel();
+            });
+        });
+        
+        function otherMenuShow(){
+            ons.createDialog('otherChoose.html').then(function (otherChooseDlg) {
+                otherMenuIdx = -1;
+                otherChooseDlg.show();
+                otherChooseDlg.on("prehide", function(){
+                    if(otherMenuIdx == 1)
+//                        appTab.loadPage("ranking.html");
+                        ons.createDialog('rankingDialog.html').then(function (rankingDlg) {
+                            getRanking();
+                            rankingDlg.show();
+                            rankingDlg.on("posthide", function(){
+                                rankingDlg.destroy();
+                            });
+                        });
+                    else if(otherMenuIdx == 2){
+                        ons.notification.prompt({
+                            title: "ユーザ変更",
+                            message: "新しいニックネームを入力してください(未入力の場合は変更されません)",
+                            callback: function(nickname) {
+                                if(nickname != '')
+                                    signup(nickname);
+                            }
+                        });
+                    }else if(otherMenuIdx == 3){
+                        popupHelp();
+                    }else if(otherMenuIdx == 4){
+//                        nameCheck();
+                        inAlert();
+                    }
+                });
+            });
+        }
+        
+        
+function onConfirm(buttonIndex) {
+    //alert('You selected button ' + buttonIndex);
+    if(buttonIndex == 2){
+        inbrow('http://www.city.yokohama.lg.jp/nishi/nisi-sanpo/apply/nishimarodiary-acceptableusepolicy.html');
+    }
+}
+
+function inAlert(){
+    navigator.notification.confirm(
+        '利用規約をブラウザで開きます', // message
+        onConfirm,            // callback to invoke with index of button pressed
+        '　',           // title
+        ['キャンセル','OK']     // buttonLabels
+    );
+}
+function inbrow(URL){
+    cordova.InAppBrowser.open(URL, '_system', 'location=yes');
+}
+    </script>
+</head>
+<body>
+    <ons-tabbar var="appTab">
+        <ons-tab page="top.html" active="true" label="トップ" icon="ion-home" no-reload>
+        </ons-tab>
+        <ons-tab page="diary.html" label="日記を読む" icon="ion-document-text" no-reload>
+        </ons-tab>
+        <ons-tab page="map.html" label="探索する" icon="ion-android-pin" no-reload>
+        </ons-tab>
+        <ons-tab page="collection.html" label="コレクション" icon="star" no-reload>
+        </ons-tab>
+        <ons-tab label="その他" icon="reorder" onclick="otherMenuShow()">
+        </ons-tab>
+    </ons-tabbar>
+    
+    <ons-template id="otherChoose.html">
+        <ons-dialog var="otherChooseDlg" style="width:90%" cancelable animation="none">
+            <ons-toolbar inline>
+                <div class="center">その他のメニュー</div>
+            </ons-toolbar>        
+            <div style="padding:10px">
+                <ons-button modifier="large" onclick="otherMenuIdx=1; otherChooseDlg.hide({animation:'none'})">ランキングを見る</ons-button>
+                <br />
+                <ons-button modifier="large" onclick="otherMenuIdx=2; otherChooseDlg.hide({animation:'none'})">ニックネームを変える</ons-button>
+                <br />
+                <ons-button modifier="large" onclick="otherMenuIdx=3; otherChooseDlg.hide({animation:'none'})">使い方の説明を見る</ons-button>
+                <br />
+                <ons-button modifier="large" onclick="otherMenuIdx=4; otherChooseDlg.hide({animation:'none'})">利用規約</ons-button>
+<!--
+                <br />
+                <ons-button modifier="large" onclick="otherMenuIdx=4; otherChooseDlg.hide({animation:'none'})">体験会用チェック</ons-button>
+-->
+            </div>
+        </ons-dialog>
+    </ons-template>
+    
+    <ons-template id="rankingDialog.html">
+        <ons-dialog var="rankingDlg" style="width:98%; height:80%" cancelable animation="none">
+            <ons-toolbar>
+                <div class="center">ランキング</div>
+            </ons-toolbar>
+            <div style="padding-top:50px; height:88%; overflow-y:scroll" id="rankingArea">
+                <select id="rankingType" style="font-size:16pt"></select>
+                <button id="rankingHelpBtn" style="font-size:16pt;">
+                    <img src="img/infoOR.png" alt="" style="width:30px; height:30px;" />
+                </button>
+                <table id="rankingTbl">
+                    <col width="55">
+                    <col style="text-align:left">
+                    <col width="115" style="text-align:left">
+                    <tbody id="rankingList">
+                        
+                    </tbody>
+                </table>
+            </div>
+        </ons-dialog>
+    </ons-template>
+    
+    <ons-template id="collectionDetail.html">
+        <ons-dialog var="collectionDetailDlg" style="width:80%; height:75%" cancelable animation="none">
+            <ons-toolbar inline>
+                <div class="center">コレクション</div>
+            </ons-toolbar>
+            <div style="padding:10px; text-align:center; font-size:16pt">
+                <img src="" id="collectionImage" height="200" /><br />
+                <div id="collectionTitle"></div>
+                <div id="collectionDescription"></div>
+                <ons-button modifier="large" onclick="collectionDetailDlg.hide()">ＯＫ</ons-button>
+            </div>
+        </ons-dialog>
+    </ons-template>
+
+    <ons-template id="alertMessage.html">
+        <ons-dialog var="alertMessageDlg" style="width:80%;" animation="none">
+            <ons-toolbar inline>
+                <div class="center">歩きスマホに注意！</div>
+            </ons-toolbar>        
+            <div style="padding:10px; text-align:center; font-size:18pt">
+                <img src="img/mark_warning01.gif" width="50%" /><br />
+                歩きスマホは大変危険です！<br />
+                日記やマップを確認する時は安全な場所で立ち止まりましょう！<br /><br />
+                <ons-button modifier="large" onclick="alertMessageDlg.hide()">ＯＫ</ons-button>
+            </div>
+        </ons-dialog>
+    </ons-template>
+    
+    <ons-template id="help.html">
+        <ons-dialog style="width:90%; height:75%" var="helpDlg" cancelable animation="none">
+            <ons-toolbar inline>
+                <div class="center">使い方の説明</div>
+            </ons-toolbar>
+            <div style="padding:10px; font-size:13pt; height:85%; overflow-y:scroll; text-align:center;">
+                <div class="helpText">
+                このアプリは「にしまろちゃん」が西区内のおすすめスポットで書いた日記を探すアプリです。
+                </div>
+                <img src="img/tutorialHomeMap.png" width="70%" height="auto" />
+                <div class="helpText">
+                まず探索するを選んで<br />
+                </div>
+                <img src="img/helpMap.png" width="70%" height="auto" /><br />
+                <div class="helpText">
+                おすすめスポットの場所を確認しましょう。
+                目的地に到着すると、”日記をみつけたよ”という通知がきます。
+                日記を確認するためにはメニューから「日記を読む」で確認できます。
+                </div>
+                <img src="img/tutorialHomeDiary.png" width="70%" height="auto"/><br />
+                <img src="img/helpDiary.png" width="70%" height="auto"/><br />
+                <div class="helpText">
+                日記の写真は「この日記の写真を変える」ボタンでオリジナルのものに変更できます。<br />
+                </div>
+                <div class="helpText">
+                スポットによっては、そのスポットにちなんだアイテムがゲットできます。ゲットしたアイテムはメニューから「コレクション」で確認できます。<br />
+                </div>
+                <img src="img/tutorialHomeCollection.png" width="70%" height="auto"/><br />
+                <img src="img/helpCollection.png" width="70%" height="auto"/><br />
+                <div class="helpText">
+                スポットを訪れると、ゲーム内のスコアが増えます(貰えるスコアは訪問回数やアイテムの有無によって異なります)。<br />
+                現在のスコアはトップページで確認できます。<br />
+                また、「ランキングを見る」でスコアによるランキングも確認できますので、上位目指して頑張ってください！<br />
+                </div>
+                <ons-button modifier="large" onclick="helpDlg.hide()">ＯＫ</ons-button>
+            </div>
+    	</ons-dialog>
+    </ons-template>
+
+    <ons-template id="diaryDetailDialog.html">
+        <ons-dialog var="diaryDetailDlg" style="width:95%; height:75%" cancelable animation="none">
+            <div id="diaryDetailTitle" style="text-align: center; position:absolute; top:0px; height:34px; left:0px; right:0px; background-color:#ccf; font-size:22px; padding-top:2px">
+                
+            </div>
+            <div id="diaryDetailArea" style="font-size:16pt; position:absolute; top:41px; bottom:49px; left:5px; right:5px; overflow-y:scroll; text-indent:1em">
+            </div>
+            <div style="text-align: center; position:absolute; bottom:0px; height:43px; left:0px; right:0px; padding-top:2px; background-color:#ccf">
+                <button id="diaryDetailDlgCloseBtn" style="font-size:20px">閉じる</button>
+            </div>
+        </ons-dialog>
+    </ons-template>
+
+
+    <ons-modal var="waitmodal">
+        <ons-icon icon="ion-load-c" spin="true"></ons-icon>
+        <br />
+        <br />通信中だよ...
+    </ons-modal>
+    <script src="../../common/lightbox2-master/src/js/lightbox.js"></script>
+</body>
+</html>

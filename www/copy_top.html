@@ -1,0 +1,52 @@
+<ons-page id="top_page">
+    <div class="mainContent" style="height:100%" id="top_content">
+        <ons-button
+            onclick="nameCheck()">
+            体験会用チェック
+        </ons-button>
+        <input type="image" class="nisimaro" width="140px" height="200px" style="margin-top:60%;margin-left:10%;" src="img/anime.gif" >
+    </div>
+</ons-page>
+
+<ons-template id="alertMessage.html">
+    <ons-dialog var="alertMessageDlg" style="width:80%;">
+        <ons-toolbar inline>
+            <div class="center">歩きスマホに注意！</div>
+        </ons-toolbar>        
+        <div style="padding:10px; text-align:center; font-size:18pt">
+            <img src="img/mark_warning01.gif" width="50%" /><br />
+            歩きスマホは大変危険です！<br />
+            日記やマップを確認する時は安全な場所で立ち止まりましょう！<br /><br />
+            <ons-button modifier="large" onclick="alertMessageDlg.hide()">ＯＫ</ons-button>
+        </div>
+    </ons-dialog>
+</ons-template>
+
+<ons-template id="help.html">
+	<ons-dialog style="width:80%; height:75%" cancelable>
+        <ons-toolbar inline>
+            <div class="center">使い方１</div>
+        </ons-toolbar>        
+		<ons-carousel var="caru" swipeable overscrollable auto-scroll fullscreen>
+			<ons-carousel-item>
+				<div style="padding:10px" class="helpContent">
+					dummy dummy dummy dummy dummy dummy dummy dummy dummy dummy dummy dummy dummy dummy dummy dummy dummy dummy dummy dummy dummy dummy dummy dummy dummy dummy dummy 
+				</div>
+			</ons-carousel-item>
+			<ons-carousel-item>
+    			<div style="padding:10px" class="helpContent">
+					dummy dummy dummy dummy dummy dummy dummy dummy dummy dummy dummy dummy dummy dummy dummy dummy dummy dummy dummy dummy dummy dummy dummy dummy dummy dummy dummy 
+				</div>
+			</ons-carousel-item>
+			<ons-carousel-item>
+        		<div style="padding:10px" class="helpContent">
+					dummy dummy dummy dummy dummy dummy dummy dummy dummy dummy dummy dummy dummy dummy dummy dummy dummy dummy dummy dummy dummy dummy dummy dummy dummy dummy dummy 
+				</div>
+			</ons-carousel-item>
+		</ons-carousel>
+        <div style="position:absolute; bottom:5px; width:95%; left:2.5%">
+            <ons-button modifier="large" onclick="caru.next()">ＯＫ</ons-button>
+        </div>
+<!--		<div style="position:absolute; top:90%; height:10%; width:100%; text-align:center"><pre id="line">■・・</pre></div> -->
+	</ons-dialog>
+</ons-template>
