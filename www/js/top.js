@@ -31,7 +31,30 @@ $(document).on("pageinit", "#top_page", function(){
         error: function(){
           //  alert("通信に失敗しちゃった！後でもう一度試してね  error:1000");
         }
-    });    
+    });
+    
+    //以下2016秋のキャンペーン200pt処理
+    $.ajax({
+        //url: "http://nishi.isc.ac.jp/nishimaroApi/autumn/ptCheck.php?userId=" + window.localStorage.getItem("userId"),
+        url: "http://nishi.isc.ac.jp/nishimaroApi/autumn/ptCheck.php?userId=1012390326",
+        type: "GET",
+        dataType: "json",
+        success: function(data)
+        {
+            var status = data['status']
+            if(status=='achieve'){
+                popAchieve(data['uniqId']);   
+            }else if(status=="exist"){
+                return;
+            }else{
+                return;
+            }
+            
+        },
+        error: function(){
+          //  alert("通信に失敗しちゃった！後でもう一度試してね  error:1000");
+        }        
+    });
 });
 
 function popupAlert(){
@@ -59,7 +82,15 @@ function popupHelp() {
 		helpDlg = dialog;
 		helpDlg.show();
 	});
-}        
+}
+
+//2016秋のキャンペーン200pt達成モーダルウインドウ
+function popAchieve(uniqId){
+    ons.createDialog('achieve.html').then(function(achieveDialog){
+        achieveDialog.show();
+        $('#uniqId').text(uniqId);
+    });
+}
 
 
 

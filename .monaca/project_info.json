@@ -13,15 +13,5 @@
         "cordova-plugin-geolocation@1.0.1",
         "cordova-plugin-dialogs@1.1.1",
         "cordova-plugin-inappbrowser@1.0.1"
-    ],
-    "title-ja": "nishimaro",
-    "title-en": "",
-    "description-ja": "",
-    "description-en": "",
-    "category": "User Template",
-    "platform": [
-        "android",
-        "ios"
-    ],
-    "name": "generated-1475484067-56f4f58efd17345d0840843c"
+    ]
 }
