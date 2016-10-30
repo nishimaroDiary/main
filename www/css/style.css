@@ -121,4 +121,8 @@
     text-align: left;
 /*    <p style="width:70%; margin-left:auto;margin-right:auto;text-align:left;">*/
 }
+*{
+    font-family: 游ゴシック体, 'Yu Gothic', YuGothic, 'ヒラギノ角ゴシック Pro', 'Hiragino Kaku Gothic Pro', メイリオ, Meiryo, Osaka, 'ＭＳ Ｐゴシック', 'MS PGothic', sans-serif;
+    letter-spacing: -0.05em;
+}
 

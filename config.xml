@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <widget xmlns="http://www.w3.org/ns/widgets" id="jp.ac.isc.nishimarodiary" version="1.3.3">
   <name>NISHIMARO DIARY</name>
-  <description/>
+  <description>Made with Monaca (http://monaca.mobi)</description>
   <author/>
   <content src="index.html"/>
   <allow-navigation href="*"/>
@@ -43,4 +43,6 @@
   <access origin="*"/>
   <preference name="DisallowOverscroll" value="true"/>
   <preference name="EnableViewportScale" value="false"/>
+  <preference name="WindowsStorePublisherName" value="My Name"/>
+  <preference name="WindowsStoreIdentityName" value="912e1fec-587b-d7b8-cb64-2802968f6947"/>
 </widget>

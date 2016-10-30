@@ -19,7 +19,6 @@ var currentMarker = null;
 var points = [];
 var watchID = null;
 var currentCategory = null;
-var debugCnt = 0;
 
 $(document).on("pageinit", "#map_page", function(){
     waitmodal.show();
@@ -31,11 +30,15 @@ $(document).on("pageinit", "#map_page", function(){
             waitmodal.hide();
             $("#categoryList").html("<option value='999'>全て</option>");
             for(var i = 0; i < data.length; i++){
+                
+                //console.log(JSON.stringify(data));
+                //[{"categoryId":"1","categoryName":"横浜道"},{"categoryId":"2","categoryName":"保土ケ谷道"},{"categoryId":"3","categoryName":"旧東海道"},{"categoryId":"4","categoryName":"みなとみらい21"}]
+                
                 var w;
-                if(data[i].categoryId == currentCategory){
+                if(data[i].categoryId == currentCategory){ //初回起動時
                     w = "<option value='"+data[i].categoryId+"' selected='selected'>" + data[i].categoryName + "</option>";
                 }
-                else{
+                else{ //次回起動時キャッシュがある場合
                     w = "<option value='"+data[i].categoryId+"'>" + data[i].categoryName + "</option>";
                 }
                 $("#categoryList").append(w);
@@ -53,7 +56,6 @@ $(document).on("pageinit", "#map_page", function(){
         function(){
             currentCategory = $("#categoryList").val();
             changeMarker(currentCategory);
-            debugCnt = 0;
         }
     );
     
@@ -91,33 +93,11 @@ $(document).on("pageinit", "#map_page", function(){
             title: 'にしまろちゃん',
             icon: "img/marker.png",
             infoWindow: {
-                content: '<table><tr><td><img src="img/nishimaro2.png" style="width: 45px;" /></td><td>' + '<p>今ここだよ</p>'
+                content:  '<table><tr><td><img src="img/migimuki.png" style="width: 45px;" /></td><td>' + '今いるところだよ'+'</td></tr></table>' 
             }
         }
         currentMarker = map.addMarker(nishimaro);
     }
-    
-    $("#selectcategory").click(function(){
-        if(currentCategory == 1) debugCnt++;
-        //テスター向けデバグコード
-        if(debugCnt == 15){
-            var lat = 35.4472819;
-            var lng = 139.6227115;
-            if (mypos.position.lat == null) {
-                map.setCenter(lat, lng);
-            }
-            mypos.position.lat = lat;//35.45310495;//lat;
-            mypos.position.lng = lng;//139.62547035;//lng;
-            map.setCenter(lat, lng);
-            
-            var myLatLng = new google.maps.LatLng( mypos.position.lat , mypos.position.lng );
-            currentMarker.setPosition(myLatLng);
-            
-            checkNearPoint();            
-        }
-    });
-    
-    debugCnt = 0;
 });
 //スポットの登録
 function changeMarker(cId){
@@ -127,6 +107,7 @@ function changeMarker(cId){
         type: "GET",
         dataType: "json",
         success: function(data){
+            console.log("aaa"+JSON.stringify(data));
             waitmodal.hide();
             points = data;
             map.removeMarkers(markers);
@@ -153,8 +134,68 @@ function changeMarker(cId){
                 //marker.infoWindow.content = marker.infoWindow.content + '<input id="directionButton" type="button" value="ここへ行く" onclick="alert();" /></td></tr></table>'
                 markers.push(marker);
             }
-            markers = map.addMarkers(markers);
-            watchMyPosition();
+            //お店のピンと吹き出しを作る
+            // 秋のキャンペーン
+            //rest_details table の restId と rests table の id を一致させる必要がある
+            $.ajax({
+                url: "http://nishi.isc.ac.jp/nishimaroApi/shop/getCoupons.php",
+                type: "GET",
+                dataType: "json",
+                success: function(data){
+                    for(var i = 0; i < data.length; i++){
+                        var html;
+                        //バグ : 写真のある店舗の詳細Dlgを参照した後に写真のない店舗を参照すると直前にみた写真のある店舗の写真が参照されるバグがある 20161029未修正
+                        // html = '<table><tr><td rowspan="3"><img src="img/cou" style="width: 45px;" /></td><td>' + data[i].content + 'だよ<br \><a href="javascript:void(0)" onClick="popupRestDatail('+data[i].id+');">詳細を見る</a></td></tr></table>';
+                        html ='<table><tr><td style="font-size:1em; text-overflow:ellipsis;"><a href="javascript:void(0)" onClick="popupRestDatail('+data[i].id+');">'+data[i].name+'</a></td></tr></table>';
+                        // else{
+                        //     html+='<td></td><td></td></tr></table>';
+                        // }
+                        html +='<table><tr>';
+                        // if(data[i].content=="キャンペーン期間のサービスはありません"){
+                        //     alert(data[i].name);
+                        // }
+                        console.log(data[i].content);
+                        if(data[i].recN==1){
+                            html += '<td><img src="img/nishiku3.png" style="height:1.6em;"</td>';
+                        }
+                        if(data[i].recG==1){
+                            html += '<td><img src="img/gachi3.png" style="height:1.6em;"</td>';
+                        }
+                        if(data[i].recS==1){
+                            html += '<td><img src="img/gakusei3.png" style="height:1.6em;"</td>';
+                        }
+                        if(data[i].content&&data[i].content!="キャンペーン期間のサービスはありません"){
+                            html += '<td><img src="img/coupon2.png" style="height:1.8em;" /></td>';
+                        }
+                        html +='</tr></table>'
+                        var marker = 
+                        {
+                            position: {
+                                lat: parseFloat(data[i].lat),
+                                lng: parseFloat(data[i].lng)
+                            },
+                            title: data[i].name,
+                            infoWindow: {
+                                 content: html,
+                                 // maxWidth: 500,
+                                 padding: "0px 0px 0px 0px",
+                                 height: "40px"
+                            }
+                        };
+                        marker.icon = "img/gourmet-pin.ico"
+                        marker.infoWindow.content = marker.infoWindow.content;
+                        markers.push(marker);
+                    }
+                    markers = map.addMarkers(markers);
+                    watchMyPosition();
+                },
+                error: function(){
+                    alert("通信に失敗しちゃった！後でもう一度試してね  error:1006");
+                    waitmodal.hide();
+                    appTab.setActiveTab(0);
+                }
+            });
+            
         },
         error: function(){
             alert("通信に失敗しちゃった！後でもう一度試してね  error:1006");
@@ -196,9 +237,7 @@ function watchMyPosition(){
         }
     );    
 }
-
 var jumpId, jumpName;
-
 function checkNearPoint(){
     var now = new Date();
     var nowDate = now.getFullYear()+"-"+( "0"+( now.getMonth()+1 ) ).slice(-2)+"-"+("0"+now.getDate() ).slice(-2);

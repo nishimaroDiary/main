@@ -10,10 +10,7 @@
     <link type="text/css" rel="stylesheet" href="common/lightbox2-master/src/css/lightbox.css">
     <style>
         .mainContent {
-            /*草原の画像*/
-            /* background-image: url(img/back.jpg); */
-            /*秋の画像*/
-            background-image: url(img/autumnBack2.png);
+            background-image: url(img/back.jpg);
             background-position:center top;
             background-repeat:no-repeat;
             background-size:cover;
@@ -22,7 +19,7 @@
     <script type="text/javascript" src="components/loader.js"></script>
     <script type="text/javascript" src="js/jquery-2.1.1.min.js"></script>
     <script type="text/javascript" src="js/hammer.min.js"></script>
-    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=geometry"></script>
+    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyCQsHQ0CArVCWEDhGNEwcaICD_6prvk_sg&libraries=geometry"></script>
     <script type="text/javascript" src="js/gmaps.js"></script>
     <script type="text/javascript" src="js/signup.js"></script>
     <script type="text/javascript" src="js/top.js"></script>
@@ -69,12 +66,7 @@
                     }else if(otherMenuIdx == 3){
                         popupHelp();
                     }else if(otherMenuIdx == 4){
-                        //秋のキャンペーン詳細
-                        autumnHelp();
-                    }else if(otherMenuIdx == 5){
-                        //応募フォーム
-                        prizeHelp();
-                    }else if(otherMenuIdx == 6){
+//                        nameCheck();
                         inAlert();
                     }
                 });
@@ -128,14 +120,11 @@ function inbrow(URL){
                 <br />
                 <ons-button modifier="large" onclick="otherMenuIdx=3; otherChooseDlg.hide({animation:'none'})">使い方の説明を見る</ons-button>
                 <br />
-                <!-- 秋のキャンペーン詳細 -->
-                <ons-button modifier="large" onclick="otherMenuIdx=4; otherChooseDlg.hide({animation:'none'})" style="background-color:#dd5080;">秋のキャンペーン詳細</ons-button>
+                <ons-button modifier="large" onclick="otherMenuIdx=4; otherChooseDlg.hide({animation:'none'})">利用規約</ons-button>
+<!--
                 <br />
-                <!-- 応募フォーム -->
-                <ons-button modifier="large" onclick="otherMenuIdx=5; otherChooseDlg.hide({animation:'none'})" style="background-color:#dd5080;">応募フォーム</ons-button>
-                <br />
-                <ons-button modifier="large" onclick="otherMenuIdx=6; otherChooseDlg.hide({animation:'none'})">利用規約</ons-button>
-
+                <ons-button modifier="large" onclick="otherMenuIdx=4; otherChooseDlg.hide({animation:'none'})">体験会用チェック</ons-button>
+-->
             </div>
         </ons-dialog>
     </ons-template>
@@ -185,7 +174,7 @@ function inbrow(URL){
                 <img src="img/mark_warning01.gif" width="50%" /><br />
                 歩きスマホは大変危険です！<br />
                 日記やマップを確認する時は安全な場所で立ち止まりましょう！<br /><br />
-                <ons-button modifier="large" onclick="alertMessageDlg.hide()">閉じる</ons-button>
+                <ons-button modifier="large" onclick="alertMessageDlg.hide()">ＯＫ</ons-button>
             </div>
         </ons-dialog>
     </ons-template>
@@ -224,57 +213,11 @@ function inbrow(URL){
                 現在のスコアはトップページで確認できます。<br />
                 また、「ランキングを見る」でスコアによるランキングも確認できますので、上位目指して頑張ってください！<br />
                 </div>
-                <ons-button modifier="large" onclick="helpDlg.hide()">閉じる</ons-button>
+                <ons-button modifier="large" onclick="helpDlg.hide()">ＯＫ</ons-button>
             </div>
-        </ons-dialog>
-    </ons-template>
-    
-<!-- 秋のキャンペーン詳細Dlg -->
-    <ons-template id="autumnHelp.html">
-        <ons-dialog style="width:90%; height:75%" var="autumnDlg" cancelable animation="none">
-            <ons-toolbar inline>
-                <div class="center">秋のキャンペーン詳細</div>
-            </ons-toolbar>
-            <div style="padding:10px; font-size:13pt; height:85%; overflow-y:scroll; text-align:center;">
-                <div class="helpText">
-                秋のキャンペーン詳細
-                </div>
-                <img src="img/tutorialHomeMap.png" width="70%" height="auto" />
-                <div class="helpText">
-                期間中、累計ポイントが200pt以上貯まった方に抽選で景品をプレゼント<br />
-                </div>
-                <!-- にしまろがいないことを拗ねて自分のをPRすることに -->
-                <ons-button modifier="large" onclick="inbrow('http://www.yurugp.jp/vote/detail.php?id=00000421')">応募はこちら</ons-button>
-                </br>
-                <ons-button modifier="large" onclick="autumnDlg.hide()">閉じる</ons-button>
-            </div>
-        </ons-dialog>
+    	</ons-dialog>
     </ons-template>
 
-<!-- 秋のキャンペーン詳細Dlg終わり -->
-
-<!-- 応募フォームDlg -->
-    <ons-template id="prizeHelp.html">
-        <ons-dialog style="width:90%;" var="autumnDlg" cancelable animation="none">
-            <ons-toolbar inline>
-                <div class="center">応募フォーム</div>
-            </ons-toolbar>
-            <div style="padding:10px; font-size:13pt; height:85%; overflow-y:scroll; text-align:center;">
-                <div id="prizeUNum" style="text-align:center; font-size:3em; color:#ffcc66">
-                1234
-                </div>
-                <div style="text-align:center; font-size:0.7em; color:#333;">
-                    この秘密のプレゼント番号を覚えて応ｂｂｂｂｂｂお
-                </div>
-                <!-- なんてことだ！最悪だ！そもそもにしまろがいない -->
-                <ons-button modifier="large" onclick="inbrow('http://www.yurugp.jp/vote/result_area.php?prefectures=14')">応募はこちら</ons-button>
-                </br>
-                <ons-button modifier="cta" onclick="autumnDlg.hide()">閉じる</ons-button>
-            </div>
-        </ons-dialog>
-    </ons-template>
-
-<!-- 
     <ons-template id="diaryDetailDialog.html">
         <ons-dialog var="diaryDetailDlg" style="width:95%; height:75%" cancelable animation="none">
             <div id="diaryDetailTitle" style="text-align: center; position:absolute; top:0px; height:34px; left:0px; right:0px; background-color:#ccf; font-size:22px; padding-top:2px">
@@ -287,113 +230,13 @@ function inbrow(URL){
             </div>
         </ons-dialog>
     </ons-template>
- -->
-<!-- 応募フォームDlg終わり -->
 
-<!-- 詳細店店舗情報 -->
-    <ons-template id="restDetail.html">
-        <ons-dialog var="restDetailDlg" style="width:95%; height:95%" animation="none">
-            <ons-toolbar>
-                <div class="left">
-                <img src="img/backArrowPink2.png" onclick="restDetailDlg.hide()" style="height:2em; margin:0.2em;" \>
-                </div>
-                <div class="center" style="color:#ff2060; font-size:1.2em;">
-                    クーポン・店舗情報
-                </div>
-                <hr Size="2"/>
-            </ons-toolbar>
-            
-            <div style="text-align:center; height:90%; overflow-y:scroll; padding-top:2.5em">
-                <div>
-                    <img id="shopImage" src="img/nishimaro2.png" style="height:8em; margin:0.3em;" \>
-                </div>
-                <div id="shopName" style=" margin:0.0em 0.4em 0.2em; border:1px solid #333333; border-radius:0.4em; color:#ff2060; font-size:1.5em; font-weight:550;">
-                    店舗名
-                </div>
-                <div id="couponMsg" style="text-align:center; font-size:0.7em; color:#333;">
-                    この画面をお店で見せてね！または
-                    <br />
-                    「にしまろダイアリーを見た」といってね！
-                </div>
-                <hr Width="88%" Color="#ccc" Size="1"/>
-                <div id="couponOtoku" style="text-align:left; margin-left:1.2em; width:90%;">
-                    <h5 style="margin-top:0; margin-bottom:0; color:#575757;">
-                        お得サービス
-                    </h5>
-                    <div style="margin-left:1em;">
-                        <p id="couponContent" style="font-size:0.8em; color:#575757;; margin-top:0; margin-bottom:0; word-wrap: break-word;">
-                            クーポン情報
-                        </p>
-                    </div>
-                </div>
-                <hr Width="88%" Color="#ccc" Size="1"/>
-                <div style="text-align:left; margin-left:1.2em; color:#333; width:90%;">
-                    <h5 style="margin-top:0; margin-bottom:0; color:#575757;">
-                        営業時間
-                    </h5>
-                    <div style="margin-left:1em;">
-                        <p id="couponOpenTime" style="font-size:0.8em; color:#575757; margin-top:0; margin-bottom:0; word-wrap: break-word;">
-                            営業時間
-                        </p>
-                        <p style="font-size:0.8em; color:#575757; margin-top:0; margin-bottom:0; word-wrap: break-word;">
-                            定休日 : <span id="couponCloseTime"></span>
-                        </p>
-                    </div>
-                </div>
-                <hr Width="88%" Color="#ccc" Size="1"/>
-                <div style="text-align:left; margin-left:1.2em; width:90%;">
-                    <h5 style="margin-top:0; margin-bottom:0; color:#575757;">
-                        紹介
-                    </h5>
-                    <div style="margin-left:1em;">
-                        <p id="couponDatail" style="font-size:0.8em; color:#575757; margin-top:0; margin-bottom:0; word-wrap: break-word;">
-                            店舗紹介
-                        </p>
-                    </div>
-                </div>
-                <hr Width="88%" Color="#ccc" Size="1"/>
-                <div style="text-align:left; margin-left:1.2em;width:90%;">
-                    <h5 style="margin-top:0; margin-bottom:0; color:#575757;">
-                        お問い合わせ
-                    </h5>
-                    <div style="margin-left:1em; margin-bottom:2em;">
-                        <p style="font-size:0.8em; color:#575757; margin-top:0; margin-bottom:0; word-wrap: break-word;">
-                            住所 : <span id="couponAddress"></span>
-                        </p>
-                        <p id="coupon-text" style="font-size:0.8em; color:#575757; margin-top:0; margin-bottom:0; word-wrap: break-word;">
-                            ? : <span id="couponTell"></span>
-                        </p>
-                    </div>
-                </div>
-                <ons-button modifier="large-cta" onclick="restDetailDlg.hide()" />
-                閉じる
-                </ons-button>
-            </div>
-        </ons-dialog>
-    </ons-template>
-<!-- 詳細店舗情報終わり -->
-
-<!-- <ons-button onclick="restDetailDlg.hide()">閉じる</ons-button> -->
 
     <ons-modal var="waitmodal">
         <ons-icon icon="ion-load-c" spin="true"></ons-icon>
         <br />
         <br />通信中だよ...
     </ons-modal>
-    
-    <!-- 秋のキャンペーン追加部分 -->
-    <ons-template id="achieve.html">
-        <ons-dialog var="achieveDlg" cancelable animation="none" style="display:flex">
-            <div style="text-align: center; margin:auto;padding:10px">
-                <img src="./img/prize200p3.png" style="width:100%;height:auto;"></img>
-                <p id="uniqId" style="font-size:20px">aaaa</p>
-                <p style="font-size:10px">以下のリンクでこの4桁の文字を入力してね</p>
-                <ons-button style="margin-top:10px;margin-bottom:10px" modifier="large"><a href="http://www.city.yokohama.lg.jp/nishi/">応募ページへ</a></ons-button>
-            </div>
-        </ons-dialog>
-    </ons-template>
-    
-    
     <script src="../../common/lightbox2-master/src/js/lightbox.js"></script>
 </body>
 </html>
