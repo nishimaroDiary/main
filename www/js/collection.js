@@ -43,6 +43,7 @@ $(document).on("pageinit", "#collection_page", function(){
             
             ons.compile($("#collectionList")[0]);
             
+            //バグ : cocollectionDlgがスクロールされないバグ 20161029未修正
             $("#collectionList .collectionThumbs").click(function(){
                 currentIdx = $(this).attr("id").substr(1);
                 ons.createDialog('collectionDetail.html').then(function (collectionDlg) {
