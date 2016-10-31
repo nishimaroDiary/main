@@ -13,9 +13,9 @@
         "cordova-plugin-geolocation@1.0.1",
         "cordova-plugin-dialogs@1.1.1",
         "cordova-plugin-inappbrowser@1.0.1"
-<<<<<<< HEAD
+
     ]
-=======
+
     ],
     "title-ja": "NishimaroDiary1610302022forcloud003-beta",
     "title-en": "",
@@ -24,5 +24,5 @@
     "category": "User Template",
     "platform": [],
     "name": "generated-1477826582-56f4f58efd17345d0840843c"
->>>>>>> d588d00e8826a67ff1a5f8209fa0fe2ed1758447
+
 }
