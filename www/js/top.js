@@ -111,15 +111,22 @@ function prizeHelp() {
             dataType:"json",
             success:function(data){
                 if(data['status']=="success"){
-                    alert(data['uniqId']);
+                    $('#prizeUNum').text(data['uniqId']);
+                    $('#prizeMessage').text('応募ページでこの4桁の文字を入力してね');
                     prizeDlg = dialog;
                     prizeDlg.show();
-                    $('#prizeUNum').empty();
-                    $('#prizeMassage').empty();
-                    $('#prizeUNum').text(data['uniqId']);
-                    $('#prizeMassage').text('応募ページでこの4桁の文字を入力してね');
+                    prizeDlg.on("posthide", function(){
+                        prizeDlg.destroy();
+                    });
                 }else{
-                    return;
+                    $.ajax({
+                        url:"http://nishi.isc.ac.jp/nishimaroApi/autumn/getTotal.php?userId=1012390326",
+                        type:"GET",
+                        dataType:"json",
+                        success:function(data){
+                            
+                        }
+                    });
                 }
             }
         });
