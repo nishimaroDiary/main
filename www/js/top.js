@@ -37,16 +37,14 @@ $(document).on("pageinit", "#top_page", function(){
     //以下2016秋のキャンペーン200pt処理
     $.ajax({
         //url: "http://nishi.isc.ac.jp/nishimaroApi/autumn/ptCheck.php?userId=" + window.localStorage.getItem("userId"),
-        url: "http://nishi.isc.ac.jp/nishimaroApi/autumn/ptCheck.php?userId=1012390326",
+        url: "http://nishi.isc.ac.jp/nishimaroApi/autumn/achieveCheck.php?userId=1012390326",
         type: "GET",
         dataType: "json",
         success: function(data)
         {
             var status = data['status']
-            if(status=='achieve'){
-                popAchieve(data['uniqId']);   
-            }else if(status=="exist"){
-                return;
+            if(status=='true'){
+                popAchieve();   
             }else{
                 return;
             }
@@ -83,18 +81,17 @@ function popupHelp() {
 		helpDlg = dialog;
 		helpDlg.show();
 	});
-<<<<<<< HEAD
+
 }
 
-//2016秋のキャンペーン200pt達成モーダルウインドウ
-function popAchieve(uniqId){
+//2016秋のキャンペーン200pt達成Dlg
+function popAchieve(){
     ons.createDialog('achieve.html').then(function(achieveDialog){
         achieveDialog.show();
-        $('#uniqId').text(uniqId);
     });
 }
-=======
-}       
+
+      
 
 // 秋のキャンペーン詳細Dlgを開く
 function autumnHelp() {
@@ -108,9 +105,25 @@ function autumnHelp() {
 //秋のキャンペーン応募フォームを開く
 function prizeHelp() {
     ons.createDialog('prizeHelp.html').then(function (dialog) {
-        prizeDlg = dialog;
-		prizeDlg.show();
-	});
+        $.ajax({
+            url: "http://nishi.isc.ac.jp/nishimaroApi/autumn/getUniqId.php?userId=1012390326",
+            type:"GET",
+            dataType:"json",
+            success:function(data){
+                if(data['status']=="success"){
+                    alert(data['uniqId']);
+                    prizeDlg = dialog;
+                    prizeDlg.show();
+                    $('#prizeUNum').empty();
+                    $('#prizeMassage').empty();
+                    $('#prizeUNum').text(data['uniqId']);
+                    $('#prizeMassage').text('応募ページでこの4桁の文字を入力してね');
+                }else{
+                    return;
+                }
+            }
+        });
+    });
 }
 //秋のキャンペーン応募フォームを開く終わり
      
@@ -218,8 +231,6 @@ function popupRestDatail(id) {
     }
 }
 //秋のキャンペーン終わり
-
->>>>>>> d588d00e8826a67ff1a5f8209fa0fe2ed1758447
 
 
 

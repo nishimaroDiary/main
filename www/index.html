@@ -261,10 +261,10 @@ function inbrow(URL){
             </ons-toolbar>
             <div style="padding:10px; font-size:13pt; height:85%; overflow-y:scroll; text-align:center;">
                 <div id="prizeUNum" style="text-align:center; font-size:3em; color:#ffcc66">
-                1234
+                    
                 </div>
-                <div style="text-align:center; font-size:0.7em; color:#333;">
-                    この秘密のプレゼント番号を覚えて応ｂｂｂｂｂｂお
+                <div id="prizeMassage" style="text-align:center; font-size:0.7em; color:#333;">
+                    
                 </div>
                 <!-- なんてことだ！最悪だ！そもそもにしまろがいない -->
                 <ons-button modifier="large" onclick="inbrow('http://www.yurugp.jp/vote/result_area.php?prefectures=14')">応募はこちら</ons-button>
@@ -386,9 +386,7 @@ function inbrow(URL){
         <ons-dialog var="achieveDlg" cancelable animation="none" style="display:flex">
             <div style="text-align: center; margin:auto;padding:10px">
                 <img src="./img/prize200p3.png" style="width:100%;height:auto;"></img>
-                <p id="uniqId" style="font-size:20px">aaaa</p>
-                <p style="font-size:10px">以下のリンクでこの4桁の文字を入力してね</p>
-                <ons-button style="margin-top:10px;margin-bottom:10px" modifier="large"><a href="http://www.city.yokohama.lg.jp/nishi/">応募ページへ</a></ons-button>
+                <ons-button style="margin-top:10px;margin-bottom:10px" modifier="large" onclick="prizeHelp(); achieveDlg.hide({animation:'none'})">応募ページへ</ons-button>
             </div>
         </ons-dialog>
     </ons-template>
