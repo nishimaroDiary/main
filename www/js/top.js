@@ -113,21 +113,23 @@ function prizeHelp() {
                 if(data['status']=="success"){
                     $('#prizeUNum').text(data['uniqId']);
                     $('#prizeMessage').text('応募ページでこの4桁の文字を入力してね');
-                    prizeDlg = dialog;
-                    prizeDlg.show();
-                    prizeDlg.on("posthide", function(){
-                        prizeDlg.destroy();
-                    });
                 }else{
                     $.ajax({
-                        url:"http://nishi.isc.ac.jp/nishimaroApi/autumn/getTotal.php?userId=1012390326",
+                        url:"http://nishi.isc.ac.jp/nishimaroApi/autumn/getTotalScore.php?userId=1012390326",
                         type:"GET",
                         dataType:"json",
                         success:function(data){
-                            
+                            var totalScore = data['totalScore'];
+                            $('#prizeUNum').text(200-data['totalScore']);
+                            $('#prizeMessage').text('あと'+data['totalScore']+'ポイントがたまったら応募できるようになるよ');
                         }
                     });
                 }
+                prizeDlg = dialog;
+                prizeDlg.show();
+                prizeDlg.on("posthide", function(){
+                    prizeDlg.destroy();
+                });
             }
         });
     });
@@ -159,6 +161,8 @@ function popupRestDatail(id) {
                 if(data.image!=null){
                     img_url="http://nishi.isc.ac.jp/images/shopImage/"+data.image;
                     $("#shopImage").attr("src",img_url);
+                }else{
+                    $("#shopImage").attr("src","img/nishimaro2.png");
                 }
                 $("#shopName").text(data.name);
                 $("#couponContent").html(data.content);
@@ -166,7 +170,7 @@ function popupRestDatail(id) {
                 $("#couponCloseTime").text(data.closeDay);
                 $("#couponDatail").html(data.detail);
                 $("#couponAddress").text(data.address);
-                $("#couponTell").text(data.tell);                
+                $("#couponTell").text(data.tell);
                 //割引サービスがないことが明確にわかっている場合
                 if(data.content=="キャンペーン期間のサービスはありません"){
                     $("#couponMsg").next("hr").remove();
