@@ -283,6 +283,8 @@ function checkNearPoint(){
                                     currentDiaryId = jumpId;
                                     appTab.setActiveTab(1);
                                 }
+                                //秋のキャンペーン200pt達成確認
+                                achieveCheck();
                             }
                         });
                     }else{
@@ -298,6 +300,8 @@ function checkNearPoint(){
                             callback: function() {
                                 void(0);
                                 //空関数にビビッて付ける
+                                //秋のキャンペーン200pt達成確認
+                                achieveCheck();
                             }
                         });  
                     }

@@ -35,28 +35,7 @@ $(document).on("pageinit", "#top_page", function(){
             {
                 $("#totalScore").text(data.totalScore);
                 $("#weeklyScore").text(data.weeklyScore);
-                
-                //以下2016秋のキャンペーン200pt処理
-                $.ajax({
-                    //url: "http://nishi.isc.ac.jp/nishimaroApi/autumn/ptCheck.php?userId=" + window.localStorage.getItem("userId"),
-                    url: "http://nishi.isc.ac.jp/nishimaroApi/autumn/achieveCheck.php?userId=" + window.localStorage.getItem("userId"),
-                    type: "GET",
-                    dataType: "json",
-                    success: function(data)
-                    {
-                        waitmodal.hide();
-                        var status = data['status']
-                        if(status=='true'){
-                            popAchieve();   
-                        }else{
-                            return;
-                        }
-                        
-                    },
-                    error: function(){
-                        //alert("通信に失敗しちゃった！後でもう一度試してね  error:1000");
-                    }        
-                });            
+                achieveCheck();
                 
             },
             error: function(){
@@ -66,6 +45,30 @@ $(document).on("pageinit", "#top_page", function(){
         
     });
 });
+
+
+function achieveCheck(){
+    //以下2016秋のキャンペーン200pt処理
+    $.ajax({
+        url: "http://nishi.isc.ac.jp/nishimaroApi/autumn/achieveCheck.php?userId=" + window.localStorage.getItem("userId"),
+        type: "GET",
+        dataType: "json",
+        success: function(data)
+        {
+            waitmodal.hide();
+            var status = data['status']
+            if(status=='true'){
+                popAchieve();   
+            }else{
+                return;
+            }
+            
+        },
+        error: function(){
+            //alert("通信に失敗しちゃった！後でもう一度試してね  error:1000");
+        }        
+    });
+}
 
 function announceCheck(donefunc){
     $.ajax({
