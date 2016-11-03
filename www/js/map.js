@@ -237,6 +237,7 @@ function watchMyPosition(){
         }
     );    
 }
+
 var jumpId, jumpName;
 function checkNearPoint(){
     var now = new Date();

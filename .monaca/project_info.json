@@ -14,12 +14,11 @@
         "cordova-plugin-dialogs@1.1.1",
         "cordova-plugin-inappbrowser@1.0.1"
     ],
-    "title-ja": "NishimaroDiary1610302022forcloud003-beta",
+    "title-ja": "nisimaro-161103-1418-for-cloud003",
     "title-en": "",
-    "description-ja": "NishimaroDiary1610302022forcloud003-beta\r\nadd prizeHelpDlg",
+    "description-ja": "1418 cloud003",
     "description-en": "",
     "category": "User Template",
     "platform": [],
-    "name": "generated-1477826582-56f4f58efd17345d0840843c"
-
+    "name": "generated-1478150312-56f4f58efd17345d0840843c"
 }

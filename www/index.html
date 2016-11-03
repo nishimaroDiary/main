@@ -97,6 +97,19 @@ function inAlert(){
         ['キャンセル','OK']     // buttonLabels
     );
 }
+
+function campaignPrize(url){
+    navigator.notification.confirm(
+        '横浜市のページをブラウザで開きます', // message
+        function(idx){
+            if(idx == 2)
+                inbrow(url);
+        },
+        '　',           // title
+        ['キャンセル','OK']     // buttonLabels
+    );
+}
+
 function inbrow(URL){
     cordova.InAppBrowser.open(URL, '_system', 'location=yes');
 }
@@ -132,7 +145,7 @@ function inbrow(URL){
                 <ons-button modifier="large" onclick="otherMenuIdx=4; otherChooseDlg.hide({animation:'none'})" style="background-color:#dd5080;">秋のキャンペーン詳細</ons-button>
                 <br />
                 <!-- 応募フォーム -->
-                <ons-button modifier="large" onclick="otherMenuIdx=5; otherChooseDlg.hide({animation:'none'})" style="background-color:#dd5080;">応募フォーム</ons-button>
+                <ons-button modifier="large" onclick="otherMenuIdx=5; otherChooseDlg.hide({animation:'none'})" style="background-color:#dd5080;">秋のキャンペーン応募フォーム</ons-button>
                 <br />
                 <ons-button modifier="large" onclick="otherMenuIdx=6; otherChooseDlg.hide({animation:'none'})">利用規約</ons-button>
 
@@ -220,7 +233,16 @@ function inbrow(URL){
                 <img src="img/tutorialHomeCollection.png" width="70%" height="auto"/><br />
                 <img src="img/helpCollection.png" width="70%" height="auto"/><br />
                 <div class="helpText">
-                スポットを訪れると、ゲーム内のスコアが増えます(貰えるスコアは訪問回数やアイテムの有無によって異なります)。<br />
+                スポットを訪れると、ゲーム内のスコア(ポイント)が増えます。<br />
+                <hr>
+                <div style="font-size:11pt">
+                【スコアの付与条件】<br />
+                    <div style="margin-left:1em">
+                    各スポットに初めて訪れると10ポイント。アイテムをゲットできるスポットだった場合はさらに+50ポイント<br/>
+                    既に訪れたスポットでも、日を変えて訪れれば追加でポイントをゲット。ただし、２回目は5ポイント、３回目は2ポイント、４回目以降は1ポイント。<br/>
+                    </div>
+                </div>
+                <hr>
                 現在のスコアはトップページで確認できます。<br />
                 また、「ランキングを見る」でスコアによるランキングも確認できますので、上位目指して頑張ってください！<br />
                 </div>
@@ -233,19 +255,30 @@ function inbrow(URL){
     <ons-template id="autumnHelp.html">
         <ons-dialog style="width:90%; height:75%" var="autumnDlg" cancelable animation="none">
             <ons-toolbar inline>
-                <div class="center">秋のキャンペーン詳細</div>
+                <div class="center">秋のキャンペーンについて</div>
             </ons-toolbar>
             <div style="padding:10px; font-size:13pt; height:85%; overflow-y:scroll; text-align:center;">
-                <div class="helpText">
-                秋のキャンペーン詳細
+                <img src="img/autumncampaign.png" width="100%" height="auto" />
+                <div class="helpText" id="campaignTxt">
+<!--                
+                    キャンペーン期間：<br />2016年11月6日(日) ～ 12月25日(日)<br />
+                    <hr>
+                    キャンペーン期間中は、飲食店などからお得なサービス提供があったり、このアプリでたまるポイントでプレゼントに応募できたりと嬉しい特典があります！<br />
+                    <hr>
+                    <br />
+                    <div style="margin-left:-0.5em">【特典１】</div>
+                    <div style="padding-left:1em">
+                    このアプリのスコア(ポイント)を２００ポイント以上ためると、応募フォームからプレゼントの応募ができます。応募締切は12/25(日)23:59まで。<br />なお、期間前からすでに２００ポイント以上ためている場合も応募対象になります。<br />
+                    プレゼントの内容は<a href="javascript:void(0)" onclick="campaignPrize()">【こちら】</a>をクリックして確認できます。<br />
+                    </div>
+                    <br />
+                    <div style="margin-left:-0.5em">【特典２】</div>
+                    <div style="padding-left:1em">
+                    このアプリのマップ上に、西区のおいしいものや老舗に認定された飲食店、情報科学専門学校の学生が口コミ等を参考に「行ってみたい」「食べてみたい」と思うお店等の情報を掲載。キャンペーン期間中には、割引や特典などお得なサービスが受けられる店舗もあります。<br />(各店舗の特典についてはマップ上の店舗情報を確認して下さい)<br />
+                    </div>
+                    <br />
+-->
                 </div>
-                <img src="img/tutorialHomeMap.png" width="70%" height="auto" />
-                <div class="helpText">
-                期間中、累計ポイントが200pt以上貯まった方に抽選で景品をプレゼント<br />
-                </div>
-                <!-- にしまろがいないことを拗ねて自分のをPRすることに -->
-                <ons-button modifier="large" onclick="inbrow('http://www.yurugp.jp/vote/detail.php?id=00000421')">応募はこちら</ons-button>
-                </br>
                 <ons-button modifier="large" onclick="autumnDlg.hide();">閉じる</ons-button>
             </div>
         </ons-dialog>
@@ -267,8 +300,8 @@ function inbrow(URL){
                     prizeMessage
                 </div>
                 <!-- なんてことだ！最悪だ！そもそもにしまろがいない -->
-                <ons-button modifier="large" onclick="inbrow('http://www.yurugp.jp/vote/result_area.php?prefectures=14')">応募はこちら</ons-button>
-                </br>
+                <ons-button id="prizeButton" modifier="large" onclick="inbrow('http://www.yurugp.jp/vote/result_area.php?prefectures=14')" style="display:none">応募はこちら</ons-button>
+                <br />
                 <ons-button modifier="cta" onclick="autumnDlg.hide();">閉じる</ons-button>
             </div>
         </ons-dialog>
@@ -390,7 +423,20 @@ function inbrow(URL){
             </div>
         </ons-dialog>
     </ons-template>
-    
+
+    <!-- アプリが起動ができないアナウンス -->
+    <ons-template id="announce.html">
+        <ons-dialog var="announseDlg" animation="none" style="display:flex; width:95%; height:75%">
+            <ons-toolbar>
+                <div class="center" id="announceTitle"></div>
+            </ons-toolbar>
+            <div style="padding:3em 10px 10px 10px; font-size:13pt; height:85%; overflow-y:scroll">
+                <div id="announceContents" style="margin-bottom: 2em">
+                </div>
+                <ons-button modifier="large" onclick="announseDlg.hide()">再実行</ons-button>
+            </div>
+        </ons-dialog>
+    </ons-template>
     
     <script src="../../common/lightbox2-master/src/js/lightbox.js"></script>
 </body>

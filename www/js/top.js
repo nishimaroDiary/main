@@ -1,79 +1,113 @@
 var alertDlg;
 var helpDlg;
 var restDetailDlg;
+var announceDlg;
+var autumnDlg;
+
+var appVersion = "010500";   //アプリケーションのバージョン番号
 
 $(document).on("pageinit", "#top_page", function(){
- 
-    if(window.sessionStorage.getItem("firstFlag") != "1"){
-        window.sessionStorage.setItem("firstFlag", "1");        
-        popupAlert();
-    }
-    $("#nameArea").text(window.localStorage.getItem("userName"));
-    
-    $("#showRankingBtn").click(function(){
-        ons.createDialog('rankingDialog.html').then(function (rankingDlg) {
-            getRanking();
-            rankingDlg.show();
-            rankingDlg.on("posthide", function(){
-                rankingDlg.destroy();
+    //起動不能アナウンス表示チェック
+    announceCheck(function(){
+        //以下の処理はアナウンス表示チェック終了後に実行
+        if(window.sessionStorage.getItem("firstFlag") != "1"){
+            window.sessionStorage.setItem("firstFlag", "1");        
+            if(!popupAlert()) return;
+        }
+        $("#nameArea").text(window.localStorage.getItem("userName"));
+        
+        $("#showRankingBtn").click(function(){
+            ons.createDialog('rankingDialog.html').then(function (rankingDlg) {
+                getRanking();
+                rankingDlg.show();
+                rankingDlg.on("posthide", function(){
+                    rankingDlg.destroy();
+                });
             });
         });
-    });
-    
-    $.ajax({
-        url: "http://nishi.isc.ac.jp/upload2/getScore.php?userId=" + window.localStorage.getItem("userId"),
-        type: "GET",
-        dataType: "json",
-        success: function(data)
-        {
-            $("#totalScore").text(data.totalScore);
-            $("#weeklyScore").text(data.weeklyScore);
-        },
-        error: function(){
-          //  alert("通信に失敗しちゃった！後でもう一度試してね  error:1000");
-        }
-    });
-    
-    //以下2016秋のキャンペーン200pt処理
-    $.ajax({
-        //url: "http://nishi.isc.ac.jp/nishimaroApi/autumn/ptCheck.php?userId=" + window.localStorage.getItem("userId"),
-        url: "http://nishi.isc.ac.jp/nishimaroApi/autumn/achieveCheck.php?userId=1012390326",
-        type: "GET",
-        dataType: "json",
-        success: function(data)
-        {
-            var status = data['status']
-            if(status=='true'){
-                popAchieve();   
-            }else{
-                return;
+        
+        waitmodal.show();
+        $.ajax({
+            url: "http://nishi.isc.ac.jp/upload2/getScore.php?userId=" + window.localStorage.getItem("userId"),
+            type: "GET",
+            dataType: "json",
+            success: function(data)
+            {
+                $("#totalScore").text(data.totalScore);
+                $("#weeklyScore").text(data.weeklyScore);
+                
+                //以下2016秋のキャンペーン200pt処理
+                $.ajax({
+                    //url: "http://nishi.isc.ac.jp/nishimaroApi/autumn/ptCheck.php?userId=" + window.localStorage.getItem("userId"),
+                    url: "http://nishi.isc.ac.jp/nishimaroApi/autumn/achieveCheck.php?userId=" + window.localStorage.getItem("userId"),
+                    type: "GET",
+                    dataType: "json",
+                    success: function(data)
+                    {
+                        waitmodal.hide();
+                        var status = data['status']
+                        if(status=='true'){
+                            popAchieve();   
+                        }else{
+                            return;
+                        }
+                        
+                    },
+                    error: function(){
+                        //alert("通信に失敗しちゃった！後でもう一度試してね  error:1000");
+                    }        
+                });            
+                
+            },
+            error: function(){
+              //  alert("通信に失敗しちゃった！後でもう一度試してね  error:1000");
             }
-            
-        },
-        error: function(){
-          //  alert("通信に失敗しちゃった！後でもう一度試してね  error:1000");
-        }        
+        });
+        
     });
 });
 
-function popupAlert(){
-//    ons.createDialog('alertMessage.html').then(function (dialog) {
-//        alertDlg = dialog;
-//		alertDlg.show();
-        
-//      alertDlg.on("posthide", function(){
-            if(window.localStorage.getItem("userId")==null){
-                ons.notification.prompt({
-                    title: "はじめまして！",
-                    message: "あなたのニックネーム(公開)を入力してください",
-                    callback: function(nickname) {
-                        signup(nickname);
-                        popupHelp();
-                    }
+function announceCheck(donefunc){
+    $.ajax({
+        url: "http://nishi.isc.ac.jp/nishimaroApi/checkAnnounce.php?appVer=" + appVersion,
+        type: "GET",
+        dataType: "json",
+        success: function(data)
+        {
+            if(data['announce'] == 'yes'){
+                ons.createDialog('announce.html').then(function (dlg) {
+                    announceDlg = dlg;
+                    $("#announceTitle").text(data['title']);
+                    $("#announceContents").html(data['contents']);
+                    announceDlg.show();
+                    announceDlg.on("posthide", function(){
+                        announceDlg.destroy();
+                        announceCheck(donefunc);
+                    });
                 });
+                return;
             }
-//      });
-//	});
+            donefunc();
+        },
+        error: function(){
+            alert("通信に失敗しちゃった！後でもう一度試してね  error:1019");
+            appTab.setActiveTab(0);
+        }
+    });
+}
+
+function popupAlert(){
+    if(window.localStorage.getItem("userId")==null){
+        ons.notification.prompt({
+            title: "はじめまして！",
+            message: "あなたのニックネーム(公開)を入力してください",
+            callback: function(nickname) {
+                signup(nickname);
+                popupHelp();
+            }
+        });
+    }
+    return window.localStorage.getItem("userId");
 }
 
 function popupHelp() {
@@ -97,7 +131,23 @@ function popAchieve(){
 function autumnHelp() {
     ons.createDialog('autumnHelp.html').then(function (dialog) {
         autumnDlg = dialog;
-		autumnDlg.show();
+        $.ajax({
+            url: "http://nishi.isc.ac.jp/nishimaroApi/autumn/campaign.html",
+            type:"GET",
+            dataType:"html",
+            success:function(data){
+                $("#campaignTxt").html(data);
+            	autumnDlg.show();
+                autumnDlg.on("posthide", function(){
+                    autumnDlg.destroy();
+                });
+            },
+            error: function(){
+                alert("通信に失敗しちゃった！後でもう一度試してね  error:1019");
+                appTab.setActiveTab(0);
+                autumnDlg.destroy();
+            }
+        });
 	});
 }
 // 秋のキャンペーン詳細Dlgを開く終わり
@@ -106,22 +156,25 @@ function autumnHelp() {
 function prizeHelp() {
     ons.createDialog('prizeHelp.html').then(function (dialog) {
         $.ajax({
-            url: "http://nishi.isc.ac.jp/nishimaroApi/autumn/getUniqId.php?userId=1012390326",
+            url: "http://nishi.isc.ac.jp/nishimaroApi/autumn/getUniqId.php?userId=" + window.localStorage.getItem("userId"),
             type:"GET",
             dataType:"json",
             success:function(data){
                 if(data['status']=="success"){
                     $('#prizeUNum').text(data['uniqId']);
                     $('#prizeMessage').text('応募ページでこの4桁の文字を入力してね');
+                    $('#prizeButton').css('display','block');
+                    
                 }else{
                     $.ajax({
-                        url:"http://nishi.isc.ac.jp/nishimaroApi/autumn/getTotalScore.php?userId=1012390326",
+                        url:"http://nishi.isc.ac.jp/nishimaroApi/autumn/getTotalScore.php?userId=" + window.localStorage.getItem("userId"),
                         type:"GET",
                         dataType:"json",
                         success:function(data){
-                            var totalScore = data['totalScore'];
-                            $('#prizeUNum').text(200-data['totalScore']);
-                            $('#prizeMessage').text('あと'+data['totalScore']+'ポイントがたまったら応募できるようになるよ');
+                            var totalScore = parseInt(data['totalScore']);
+                            if(isNaN(totalScore)) totalScore = 0;
+                            $('#prizeUNum').text(totalScore+'pt');
+                            $('#prizeMessage').text('あと'+(200-totalScore)+'ポイントたまったら応募できるようになるよ！');
                         }
                     });
                 }
@@ -233,7 +286,7 @@ function popupRestDatail(id) {
                 	restDetailDlg.show();
                 },
                 error: function(){
-                    alert("通信に失敗しちゃった！後でもう一度試してね  error:1006");
+                    //alert("通信に失敗しちゃった！後でもう一度試してね  error:1006");
                     waitmodal.hide();
                     appTab.setActiveTab(0);
                 }
