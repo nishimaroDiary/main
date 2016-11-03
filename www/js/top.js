@@ -178,6 +178,10 @@ function prizeHelp() {
                             if(isNaN(totalScore)) totalScore = 0;
                             $('#prizeUNum').text(totalScore+'pt');
                             $('#prizeMessage').text('あと'+(200-totalScore)+'ポイントたまったら応募できるようになるよ！');
+                        },
+                        error:function(){
+                            alert("通信に失敗しちゃった！後でもう一度試してね  error:1019");
+                            appTab.setActiveTab(0);
                         }
                     });
                 }
@@ -186,6 +190,10 @@ function prizeHelp() {
                 prizeDlg.on("posthide", function(){
                     prizeDlg.destroy();
                 });
+            },
+            error:function(){
+                alert("通信に失敗しちゃった！後でもう一度試してね  error:1019");
+                appTab.setActiveTab(0);
             }
         });
     });
